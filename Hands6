@@ -1,0 +1,73 @@
+import java.util.ArrayList;
+import java.util.Collections;
+
+public class EstadisticaDescriptiva {
+
+    private ArrayList<Integer> dataSet;
+
+    public EstadisticaDescriptiva(ArrayList<Integer> dataSet) {
+        this.dataSet = dataSet;
+    }
+
+    public void generarTablaDescriptiva(int numClases) {
+        // Calcular el valor mínimo y máximo en el conjunto de datos.
+        double min = Collections.min(dataSet);
+        double max = Collections.max(dataSet);
+
+        // Calcular la amplitud de las clases.
+        double amplitud = (max - min) / numClases;
+
+        // Imprimir información sobre el rango, el número de clases y la amplitud.
+        System.out.println("RANGO: " + (max - min));
+        System.out.println("NUMERO de CLASES: " + numClases);
+        System.out.println("Amplitud: " + amplitud);
+
+        // Imprimir encabezado de la tabla descriptiva.
+        System.out.println("\nTABLA DESCRIPTIVA");
+        System.out.println("Clase         Fi Ab         Punto Medio         Fi Acum        Porcentaje %        Fi Re        Fi Re Acum");
+
+        double acum = 0;
+        double frecuenciaRelativaAcum = 0;
+
+        // Calcular información para cada clase.
+        for (int i = 0; i < numClases; i++) {
+            double limInf = min + i * amplitud;  // Calcular el límite inferior de la clase.
+            double limSup = limInf + amplitud;   // Calcular el límite superior de la clase.
+            double puntoMedio = (limInf + limSup) / 2;  // Calcular el punto medio de la clase.
+
+            // Contar la frecuencia absoluta de valores en el intervalo.
+            int frecuenciaAbsoluta = contarValoresEnIntervalo(limInf, limSup);
+            acum += frecuenciaAbsoluta;
+
+            // Calcular la frecuencia relativa, frecuencia acumulada, porcentaje y frecuencia relativa acumulada.
+            double frecuenciaRelativa = (double) frecuenciaAbsoluta / dataSet.size();
+            double frecuenciaAcumulada = acum;
+            double porcentaje = frecuenciaRelativa * 100;
+            double frecRel = frecuenciaRelativa;
+            frecuenciaRelativaAcum += frecRel;
+
+            // Imprimir información de la clase actual.
+            System.out.printf("%.2f - %.2f         %d                %.2f                 %.0f             %.2f%%           %.2f%%        %.2f%%\n", limInf, limSup, frecuenciaAbsoluta, puntoMedio, frecuenciaAcumulada, porcentaje, frecuenciaRelativa, frecuenciaRelativaAcum);
+        }
+    }
+
+    private int contarValoresEnIntervalo(double limInf, double limSup) {
+        int frecuenciaAbsoluta = 0;
+
+        for (Integer valor : dataSet) {
+            if (valor >= limInf && valor <= limSup) {
+                frecuenciaAbsoluta++;
+            }
+        }
+        return frecuenciaAbsoluta;
+    }
+
+    public static void main(String[] args) {
+
+        ArrayList<Integer> data = new ArrayList<>();
+        Collections.addAll(data, 38, 15, 10, 12, 62, 49, 46, 25, 56, 27, 24, 23, 21, 20, 25, 38, 27, 48, 35, 50, 65, 59, 58, 47, 42, 37, 35, 32, 40, 28, 14, 12, 24, 66, 73, 72, 70, 68, 65, 54, 48, 34, 33, 21, 19, 61, 59, 47, 46, 30, 30);
+
+        EstadisticaDescriptiva ed = new EstadisticaDescriptiva(data);
+        ed.generarTablaDescriptiva(7); // Cambio para 7 clases
+    }
+}
