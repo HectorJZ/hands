@@ -1,0 +1,53 @@
+import java.util.HashSet;
+import java.util.Set;
+
+public class ConjuntoOperaciones {
+    private Set<Character> elementos;
+
+    public ConjuntoOperaciones() {
+        this.elementos = new HashSet<>();
+    }
+
+    public ConjuntoOperaciones(Set<Character> elementos) {
+        this.elementos = new HashSet<>(elementos);
+    }
+
+    public void unir(ConjuntoOperaciones otroConjunto) {
+        Set<Character> union = new HashSet<>(this.elementos);
+        union.addAll(otroConjunto.getElementos());
+        this.elementos = union;
+    }
+
+    public void intersectar(ConjuntoOperaciones otroConjunto) {
+        this.elementos.retainAll(otroConjunto.getElementos());
+    }
+
+    public void restar(ConjuntoOperaciones otroConjunto) {
+        this.elementos.removeAll(otroConjunto.getElementos());
+    }
+
+    public Set<Character> getElementos() {
+        return this.elementos;
+    }
+
+    public static void main(String[] args) {
+        ConjuntoOperaciones A = new ConjuntoOperaciones(Set.of('2', '4', '6', '0'));
+        ConjuntoOperaciones B = new ConjuntoOperaciones(Set.of('1', '3', '5', '7', '9'));
+        ConjuntoOperaciones C = new ConjuntoOperaciones(Set.of('C', 'D', 'E', 'F'));
+        ConjuntoOperaciones D = new ConjuntoOperaciones(Set.of('D', 'E', 'F', 'G'));
+        ConjuntoOperaciones F = new ConjuntoOperaciones(Set.of('F', 'G'));
+        ConjuntoOperaciones G = new ConjuntoOperaciones(Set.of('F', 'G'));
+
+        A.unir(B);
+        System.out.println("A u B: " + A.getElementos());
+
+        A.intersectar(C);
+        System.out.println("A n C: " + A.getElementos());
+
+        ConjuntoOperaciones resultado = new ConjuntoOperaciones(A.getElementos());
+        resultado.intersectar(D);
+        resultado.restar(F);
+        resultado.restar(G);
+        System.out.println("[(A u B) n D] - (F n G): " + resultado.getElementos());
+    }
+}
